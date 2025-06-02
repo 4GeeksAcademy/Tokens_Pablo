@@ -1,52 +1,62 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import React, { useState } from "react"
+import { useNavigate, Link } from "react-router-dom";
 
 export const Home = () => {
 
-	const { store, dispatch } = useGlobalReducer()
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const navigate = useNavigate();
 
-	const loadMessage = async () => {
+	const handleLogin = async (e) => {
+		e.preventDefault();
+
 		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+			const response = await fetch("https://refactored-bassoon-g47p4rj6vx4qhpvr4-3001.app.github.dev/api/user/login",
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ email, password }),
+				});
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
-
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
-
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
-
-			return data
-
+				if (response.ok) {
+					const data = await response.json();
+					localStorage.setItem("token", data.token); //Guardado de Token
+					navigate("/privatepage");
+				} else {
+					const errorData = await response.json();
+					alert ("Error al iniciar sesión: " + errorData.message);
+				}
 		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
+			console.error("Error en login:", error);
+			alert("A ocurrido un error al inicias sesión.");
 		}
-
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
+	};
 
 	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
+		<>
+			<div>
+				<h1>Iniciar Sesion</h1>
 			</div>
-		</div>
+			<div>
+				<form onSubmit={handleLogin}>
+					<div>
+						<label>Email</label>
+						<input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+					</div>
+					<div>
+						<label>Contraseña</label>
+						<input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+					</div>
+					<div>
+						<button type="submit">Iniciar sesión</button>
+					</div>
+				</form>
+				<div>
+					<Link to="/createuser"><p>Crear Usuario</p></Link>
+				</div>
+			</div>
+		</>
 	);
 }; 
