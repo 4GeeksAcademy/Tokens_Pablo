@@ -60,3 +60,12 @@ export const Home = () => {
 		</>
 	);
 }; 
+
+
+
+
+//Quería hacer la pagína más bonita pero no me daba el tiempo, no obstante he practicado mucho el uso de CSS y bootstrap en otros proyectos
+
+//En este proyecto me he centrado en Crear Usuarios y abrir/cerrar sesión
+
+//He borrado todos los usuarios creados en las pruebas asíque puedes crear uno directamente al abrir la pagina

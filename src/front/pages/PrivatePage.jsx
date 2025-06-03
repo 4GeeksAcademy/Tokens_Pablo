@@ -13,6 +13,7 @@ export const PrivatePage = () => {
   return (
     <>
       <div>
+        <h1>Hola "Instertar nombre usuario"</h1>
         <h1>Esto sería el inicio de una pagina web que requiere iniciar sesión, debido al tiempo no he podido agregar CSS</h1>
         <h3>No obstante aquí dejo un "Button" de cerrar sesión el cual normalmente pondría en un "Navbar"</h3>
         <button onClick={handleLogout}>Cerrar Sesión</button>
