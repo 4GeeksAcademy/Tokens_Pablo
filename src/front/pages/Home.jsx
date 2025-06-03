@@ -23,6 +23,7 @@ export const Home = () => {
 				if (response.ok) {
 					const data = await response.json();
 					localStorage.setItem("token", data.token); //Guardado de Token
+					localStorage.setItem("username", data.user.name); //Nombre usuario para renderizar al iniciar sesión
 					navigate("/privatepage");
 				} else {
 					const errorData = await response.json();
